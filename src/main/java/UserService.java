@@ -4,6 +4,7 @@ import java.util.stream.Collectors;
 
 public class UserService
 {
+    //cala logika apki
     private Hotel hotel;
 
     UserService()

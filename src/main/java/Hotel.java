@@ -1,15 +1,13 @@
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class Hotel
 {
     private List<Room> rooms;
-
+//dostep do danych czyli pokoj, zapisywanie, pobieranie danych - klasa repozytorium
     Hotel()
     {
-        rooms = new ArrayList<Room>();
+        rooms = new ArrayList<>();
         rooms.add(new Room(1, 2, true, true));
         rooms.add(new Room(2, 3, false, true));
         rooms.add(new Room(3, 2, true, false));
