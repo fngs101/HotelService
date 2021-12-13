@@ -1,3 +1,5 @@
+import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
 
 public class Controller
@@ -16,14 +18,16 @@ public class Controller
     {
         System.out.println("Welcome to the Grand Hotel");
 
+        int choice;
         do
         {
             showMenu();
-            int choice = readChoice();
+            choice = readChoice();
             executeChoice(choice);
 
         }
-        while(true);
+        while(choice != 5);
+        System.out.println("Did not find what you were looking for? Call Hotel Service 600-500-400");
     }
 
     public void showMenu()
@@ -31,7 +35,7 @@ public class Controller
         System.out.println("Please choose option");
         System.out.println("1 - show all rooms");
         System.out.println("2 - show currently available rooms");
-        System.out.println("3  - book a room");
+        System.out.println("3 - book a room");
         System.out.println("4 - vacate a room");
         System.out.println("5 - cancel");
     }
@@ -44,8 +48,9 @@ public class Controller
             Scanner scanner = new Scanner(System.in);
             input = scanner.nextInt();
         }
-        catch (NumberFormatException e)
+        catch (NumberFormatException |InputMismatchException e)
         {
+            System.out.println("Not found, enter again");
             input = readChoice();
         }
         return input;
@@ -56,22 +61,69 @@ public class Controller
         switch (input)
         {
             case 1:
-                System.out.println(userService.getRoomList());
+                listAllRooms();
                 break;
             case 2:
-                userService.getAvailableRooms();
+                listAvailableRooms();
                 break;
             case 3:
-                Scanner scanner2 = new Scanner(System.in);
-                int roomToBook = scanner2.nextInt();
-                userService.bookRoom(roomToBook);
+                bookRoom();
                 break;
             case 4:
-                Scanner scanner3 = new Scanner(System.in);
-                int roomToVacate = scanner3.nextInt();
-                userService.vacateRoom(roomToVacate);
+                vacateRoom();
                 break;
-
+            case 5:
+                break;
         }
     }
+
+    public void listAllRooms()
+    {
+        List<Room> allRoomList = userService.getRoomList();
+        for(Room room : allRoomList)
+        {
+            System.out.println(room.toString());
+        }
+    }
+
+    public void listAvailableRooms()
+    {
+        List<Room> allAvailableRooms = userService.getAvailableRooms();
+        for(Room room : allAvailableRooms)
+        {
+            System.out.println(room.toString());
+        }
+    }
+
+    public void bookRoom()
+    {
+        System.out.println("Please enter room number you wish to book");
+        Scanner scanner2 = new Scanner(System.in);
+        int roomToBook = scanner2.nextInt();
+        boolean possible = userService.bookRoom(roomToBook);
+        if(possible)
+        {
+            System.out.println("Room booked, please check your email");
+
+        } else
+        {
+            System.out.println("Room taken, please choose another room");
+        }
+    }
+
+    public void vacateRoom()
+    {
+        System.out.println("Enter the number of the room which you are vacating");
+        Scanner scanner3 = new Scanner(System.in);
+        int roomToVacate = scanner3.nextInt();
+        boolean canBeVacated = userService.vacateRoom(roomToVacate);
+        if(canBeVacated)
+        {
+            System.out.println("You have successfully checked out");
+        } else
+        {
+            System.out.println("Wrong room number");
+        }
+    }
+
 }

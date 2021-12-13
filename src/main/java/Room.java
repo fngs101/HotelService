@@ -21,7 +21,7 @@ public class Room
     @Override
     public String toString()
     {
-        return "Room number "  + number + " available?" + available;
+        return "Room number "  + number;
     }
 
     public int getNumber()
@@ -33,4 +33,6 @@ public class Room
     {
         this.available = available;
     }
+
+
 }

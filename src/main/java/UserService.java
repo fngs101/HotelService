@@ -21,15 +21,6 @@ public class UserService
     public List<Room> getAvailableRooms()
     {
         List<Room> allRooms = getRoomList();
-
-        //pętla
-//        boolean isAvailable = Arrays.stream(availableRooms)
-//        for(Room r : availableRooms)
-//        {
-//            if(room.isBathroomIncluded())
-//        }
-        //stream
-
         return allRooms
                 .stream()
                 .filter(Room::isAvailable)
@@ -53,8 +44,6 @@ public class UserService
 
     public boolean vacateRoom(int roomNumber)
     {
-        //NOTE jak w tym zrobić negacje
-//        List<Room> allRooms = hotel.getAllRooms().stream().filter(Room::isAvailable).collect(Collectors.toList());;
         List<Room> allRooms = hotel.getAllRooms();
         for(Room room : allRooms)
         {
