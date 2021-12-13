@@ -1,9 +1,15 @@
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
 public class Room
 {
     private int number;
     private int size;
     private boolean bathroomIncluded;
     private boolean available;
+    private List<Guest> guestList;
 
     Room(int number, int size, boolean bathroomIncluded, boolean available)
     {
@@ -11,6 +17,7 @@ public class Room
         this.size = size;
         this.bathroomIncluded = bathroomIncluded;
         this.available = available;
+        guestList = new ArrayList<>();
     }
 
     public boolean isAvailable()
@@ -33,6 +40,12 @@ public class Room
     {
         this.available = available;
     }
+
+    public void addToGuestList(String name, String lastname, LocalDate birthday)
+    {
+        guestList.add(new Guest(name, lastname, birthday));
+    }
+
 
 
 }
