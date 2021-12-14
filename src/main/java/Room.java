@@ -10,6 +10,7 @@ public class Room
     private boolean bathroomIncluded;
     private boolean available;
     private List<Guest> guestList;
+    private boolean cleaned;
 
     Room(int number, int size, boolean bathroomIncluded, boolean available)
     {
@@ -18,6 +19,7 @@ public class Room
         this.bathroomIncluded = bathroomIncluded;
         this.available = available;
         guestList = new ArrayList<>();
+        cleaned = true;
     }
 
     public boolean isAvailable()
@@ -53,6 +55,8 @@ public class Room
 
     }
 
-
-
+    public void setUncleaned()
+    {
+        cleaned = false;
+    }
 }
