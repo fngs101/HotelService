@@ -100,19 +100,25 @@ public class Controller
         System.out.println("Please enter room number you wish to book");
         Scanner scanner2 = new Scanner(System.in);
         int roomToBook = scanner2.nextInt();
-        boolean possible = userService.bookRoom(roomToBook);
-        readGuestName(roomToBook);
-        if(possible)
+        boolean grownUp = readGuestName(roomToBook);
+        if(grownUp)
         {
-            System.out.println("Room booked, please check your email");
-
+            boolean possibleToBook = userService.bookRoom(roomToBook);
+            if(possibleToBook)
+            {
+                System.out.println("Room booked, please check your email");
+            } else
+            {
+                System.out.println("Room taken");
+            }
         } else
         {
-            System.out.println("Room taken, please choose another room");
+            System.out.println("Only adults are allowed to book a room");
         }
+
     }
 
-    public void readGuestName(int roomNumber)
+    public boolean readGuestName(int roomNumber)
     {
         System.out.println("Please insert your name and lastname");
         Scanner scanner = new Scanner(System.in);
@@ -120,7 +126,7 @@ public class Controller
         System.out.println("Please insert your date of birth (yyyy-mm-dd)");
         Scanner scanner2 = new Scanner(System.in);
         String date = scanner2.nextLine();
-        userService.addNameToGuestList(nameLastname, date, roomNumber); //jak to zwroci boolean fałsz to że nie mozna zarezerwoać
+        return userService.addNameToGuestList(nameLastname, date, roomNumber);
     }
 
 //    public void readDateOfBirth()

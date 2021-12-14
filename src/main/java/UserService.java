@@ -42,17 +42,17 @@ public class UserService
         return false;
     }
 
-    public void addNameToGuestList(String identity, String date, int roomNumber)
+    public boolean addNameToGuestList(String identity, String date, int roomNumber)
     {
-        //tutaj petla po roomach i do tego wybranego z parametru dodaj do jego listy guests
+        boolean added = false;
         for(Room room : hotel.getAllRooms())
         {
             if(room.getNumber() == roomNumber)
             {
-                room.addToGuestList(identity, date);
+                added = room.addToGuestList(identity, date);
             }
         }
-        //niech to zwraca boolean pochodzące od guesta, że niepelnoletni
+        return added;
 
     }
 

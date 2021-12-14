@@ -4,27 +4,24 @@ import java.time.LocalDateTime;
 public class Guest
 {
     private String name;
-    private String lastname;
-    private LocalDate birthday;
+    private String birthday;
 
-    Guest(String name, String lastname, LocalDate birthday)
+    Guest(String name, String birthday)
     {
         this.name = name;
-        this.lastname = lastname;
         this.birthday = birthday;
     }
 
     @Override
     public String toString()
     {
-        return name + " " +
-                lastname
-                + " " + birthday;
+        return name + " " + birthday;
     }
 
     public boolean isAdult()
     {
-        LocalDate underage = LocalDate.parse("2002-12-31");
-        return birthday.isAfter(underage);
+        LocalDate birthDate = LocalDate.parse(birthday);
+        LocalDate underage = LocalDate.parse("2002-12-14");
+        return birthDate.isBefore(underage);
     }
 }

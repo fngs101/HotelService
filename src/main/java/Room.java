@@ -41,10 +41,16 @@ public class Room
         this.available = available;
     }
 
-    public void addToGuestList(String name, String birthday)
+    public boolean addToGuestList(String name, String birthday)
     {
-        //przekształć birthday na localdate ale najpierw sprawdz czy guest jest pełnoletni, niech to zwraca boolean
-//        guestList.add(new Guest(name, lastname, birthday));
+        Guest guest = new Guest(name, birthday);
+        if(guest.isAdult())
+        {
+            guestList.add(guest);
+            return true;
+        }
+        return false;
+
     }
 
 
