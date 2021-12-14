@@ -101,6 +101,7 @@ public class Controller
         Scanner scanner2 = new Scanner(System.in);
         int roomToBook = scanner2.nextInt();
         boolean possible = userService.bookRoom(roomToBook);
+        readGuestName(roomToBook);
         if(possible)
         {
             System.out.println("Room booked, please check your email");
@@ -110,6 +111,23 @@ public class Controller
             System.out.println("Room taken, please choose another room");
         }
     }
+
+    public void readGuestName(int roomNumber)
+    {
+        System.out.println("Please insert your name and lastname");
+        Scanner scanner = new Scanner(System.in);
+        String nameLastname = scanner.nextLine();
+        System.out.println("Please insert your date of birth (yyyy-mm-dd)");
+        Scanner scanner2 = new Scanner(System.in);
+        String date = scanner2.nextLine();
+        userService.addNameToGuestList(nameLastname, date, roomNumber); //jak to zwroci boolean fałsz to że nie mozna zarezerwoać
+    }
+
+//    public void readDateOfBirth()
+//    {
+//        czy to nie powinna byc osobna metoda na datę guest, bo może ta wyżej juz troche za duzo ma?
+//
+//    }
 
     public void vacateRoom()
     {
