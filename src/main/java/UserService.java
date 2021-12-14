@@ -28,7 +28,7 @@ public class UserService
     }
 
 
-    public boolean bookRoom(int roomNumber)
+    public void bookRoom(int roomNumber)
     {
         List<Room> availableRooms = getAvailableRooms();
         for(Room room : availableRooms)
@@ -36,6 +36,19 @@ public class UserService
             if(room.getNumber() == roomNumber)
             {
                 room.setAvailable(false);
+            }
+
+        }
+
+    }
+
+    public boolean checkIfAvailable(int roomNumber)
+    {
+        List<Room> availableRooms = getAvailableRooms();
+        for(Room room : availableRooms)
+        {
+            if(room.getNumber() == roomNumber)
+            {
                 return true;
             }
         }

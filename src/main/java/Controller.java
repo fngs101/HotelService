@@ -100,25 +100,28 @@ public class Controller
         System.out.println("Please enter room number you wish to book");
         Scanner scanner2 = new Scanner(System.in);
         int roomToBook = scanner2.nextInt();
-        boolean grownUp = readGuestName(roomToBook);
-        if(grownUp)
+        boolean isAvailable = userService.checkIfAvailable(roomToBook);
+        if(isAvailable)
         {
-            boolean possibleToBook = userService.bookRoom(roomToBook);
-            if(possibleToBook)
+            boolean isAdult = readGuestData(roomToBook);
+            if(isAdult)
             {
+                userService.bookRoom(roomToBook);
                 System.out.println("Room booked, please check your email");
-            } else
+            }
+            else
             {
-                System.out.println("Room taken");
+                System.out.println("Sorry, only adults can book rooms");
             }
         } else
         {
-            System.out.println("Only adults are allowed to book a room");
+            System.out.println("Room booked");
         }
+
 
     }
 
-    public boolean readGuestName(int roomNumber)
+    public boolean readGuestData(int roomNumber)
     {
         System.out.println("Please insert your name and lastname");
         Scanner scanner = new Scanner(System.in);
