@@ -47,7 +47,7 @@ public class UserService
         List<Room> availableRooms = getAvailableRooms();
         for(Room room : availableRooms)
         {
-            if(room.getNumber() == roomNumber)
+            if(room.getNumber() == roomNumber && room.isCleaned())
             {
                 return true;
             }
@@ -58,7 +58,7 @@ public class UserService
     public boolean addNameToGuestList(String identity, String date, int roomNumber)
     {
         boolean added = false;
-        for(Room room : hotel.getAllRooms())
+        for(Room room : getRoomList())
         {
             if(room.getNumber() == roomNumber)
             {
@@ -71,20 +71,42 @@ public class UserService
 
     public boolean vacateRoom(int roomNumber)
     {
-        List<Room> allRooms = hotel.getAllRooms();
+        List<Room> allRooms = getRoomList();
         for(Room room : allRooms)
         {
             if(room.getNumber() == roomNumber && !room.isAvailable())
             {
                 room.setAvailable(true);
+                room.setUncleaned();
                 return true;
             }
         }
         return false;
     }
 
-    public void cleanRoom()
+    public boolean cleanRoom(int roomNumber)
     {
+        for(Room room : getRoomList())
+        {
+            if(room.getNumber() == roomNumber && !room.isCleaned())
+            {
+                room.setCleaned();
+                return true;
+            }
+        }
+        return false;
+    }
 
+    public List<Room> listUncleanedRooms()
+    {
+        List<Room> uncleanedRooms = new ArrayList<>();
+        for(Room room : getRoomList())
+        {
+            if(!room.isCleaned())
+            {
+                uncleanedRooms.add(room);
+            }
+        }
+        return uncleanedRooms;
     }
 }

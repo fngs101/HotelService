@@ -59,4 +59,14 @@ public class Room
     {
         cleaned = false;
     }
+
+    public void setCleaned()
+    {
+        cleaned = true;
+    }
+
+    public boolean isCleaned()
+    {
+        return cleaned;
+    }
 }
