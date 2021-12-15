@@ -26,7 +26,7 @@ public class Controller
             executeChoice(choice);
 
         }
-        while(choice != 7);
+        while(choice != 8);
         System.out.println("Did not find what you were looking for? Call Hotel Service 600-500-400");
     }
 
@@ -81,6 +81,9 @@ public class Controller
                 askForCleaning();
                 break;
             case 7:
+                listAllUnavailable();
+                break;
+            case 8:
                 break;
         }
     }
@@ -105,6 +108,7 @@ public class Controller
 
     public void bookRoom()
     {
+        //poprawic za dlugie
         System.out.println("Please enter room number you wish to book");
         Scanner scanner = new Scanner(System.in);
         int roomToBook = scanner.nextInt();
@@ -115,6 +119,7 @@ public class Controller
             if(isAdult)
             {
                 userService.bookRoom(roomToBook);
+                askForDates(roomToBook);
                 System.out.println("Room booked, please check your email");
             }
             else
@@ -129,8 +134,20 @@ public class Controller
 
     }
 
+    public void askForDates(int roomNumber)
+    {
+        System.out.println("Please enter check in date (YYY-MM-DD)");
+        Scanner scanner = new Scanner(System.in);
+        String dateCheckIn = scanner.nextLine();
+        System.out.println("Please enter check out date (YYYY-MM-DD)");
+        Scanner scanner2 = new Scanner(System.in);
+        String dateCheckout = scanner2.nextLine();
+        userService.addDates(dateCheckIn, dateCheckout, roomNumber);
+    }
+
     public boolean readGuestData(int roomNumber)
     {
+        System.out.println("Please insert guest number");
         System.out.println("Please insert your name and lastname");
         Scanner scanner = new Scanner(System.in);
         String nameLastname = scanner.nextLine();
@@ -188,6 +205,16 @@ public class Controller
         {
             System.out.println("Room already clean");
         }
+    }
+
+    public void listAllUnavailable()
+    {
+        List<Room> unavailableRooms = userService.getUnavailableRooms();
+        for(Room room : unavailableRooms)
+        {
+            System.out.println(room.toString());
+        }
+
     }
 
 }

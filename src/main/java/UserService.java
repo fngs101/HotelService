@@ -4,6 +4,8 @@ import java.util.stream.Collectors;
 
 public class UserService
 {
+    //troche zepsułam bo w tym momencie klasa hotel stała sie zbędna, czy moze byc ta obecna przekształcona na hotelservice
+    //i posiadac liste pokojów?
     //cala logika apki
     private Hotel hotel;
 
@@ -108,5 +110,31 @@ public class UserService
             }
         }
         return uncleanedRooms;
+    }
+
+    public void addDates(String dateCheckIn, String dateCheckOut, int roomNumber)
+    {
+        List<Room> unavailable = getUnavailableRooms();
+        for(Room room : unavailable)
+        {
+            if(room.getNumber() == roomNumber)
+            {
+                room.setCheckInDate(dateCheckIn);
+                room.setCheckOutDate(dateCheckOut);
+            }
+        }
+    }
+
+    public List<Room> getUnavailableRooms()
+    {
+        List<Room> unavailableRooms = new ArrayList<>();
+        for(Room room : getRoomList())
+        {
+            if(!room.isAvailable() && room.isCleaned())
+            {
+                unavailableRooms.add(room);
+            }
+        }
+        return unavailableRooms;
     }
 }
