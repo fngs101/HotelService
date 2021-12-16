@@ -22,39 +22,20 @@ public class UserService
 
     public List<Room> getAvailableRooms()
     {
-        List<Room> allRooms = getRoomList();
-        return allRooms
-                .stream()
-                .filter(Room::isAvailable)
-                .collect(Collectors.toList());
+        return hotel.getAvailableRooms();
     }
 
 
-    public void bookRoom(int roomNumber)
+    public void bookRoom(int roomNumber, Guest guest, String checkInDate, String checkOutDate) throws HotelException
     {
-        List<Room> availableRooms = getAvailableRooms();
-        for(Room room : availableRooms)
-        {
-            if(room.getNumber() == roomNumber)
-            {
-                room.setAvailable(false);
-            }
-
-        }
-
+        Room room = hotel.getRoom(roomNumber);
+        room.setAvailable(false);
     }
 
-    public boolean checkIfAvailable(int roomNumber)
+    public boolean checkIfAvailable(int roomNumber) throws HotelException
     {
-        List<Room> availableRooms = getAvailableRooms();
-        for(Room room : availableRooms)
-        {
-            if(room.getNumber() == roomNumber && room.isCleaned())
-            {
-                return true;
-            }
-        }
-        return false;
+        Room room = hotel.getRoom(roomNumber);
+        return room.isCleaned() && room.isAvailable();
     }
 
     public boolean addNameToGuestList(String identity, String date, int roomNumber)
@@ -71,45 +52,32 @@ public class UserService
 
     }
 
-    public boolean vacateRoom(int roomNumber)
+    public boolean vacateRoom(int roomNumber) throws HotelException
     {
-        List<Room> allRooms = getRoomList();
-        for(Room room : allRooms)
+        Room room = hotel.getRoom(roomNumber);
+        if(!room.isAvailable())
         {
-            if(room.getNumber() == roomNumber && !room.isAvailable())
-            {
-                room.setAvailable(true);
-                room.setUncleaned();
-                return true;
-            }
+            room.setAvailable(true);
+            room.setUncleaned();
+            return true;
         }
         return false;
     }
 
-    public boolean cleanRoom(int roomNumber)
+    public boolean cleanRoom(int roomNumber) throws HotelException
     {
-        for(Room room : getRoomList())
+        Room room = hotel.getRoom(roomNumber);
+        if(!room.isCleaned())
         {
-            if(room.getNumber() == roomNumber && !room.isCleaned())
-            {
-                room.setCleaned();
-                return true;
-            }
+            room.setCleaned();
+            return true;
         }
         return false;
     }
 
-    public List<Room> listUncleanedRooms()
+    public List<Room> getUncleanedRooms()
     {
-        List<Room> uncleanedRooms = new ArrayList<>();
-        for(Room room : getRoomList())
-        {
-            if(!room.isCleaned())
-            {
-                uncleanedRooms.add(room);
-            }
-        }
-        return uncleanedRooms;
+        return hotel.listUncleanedRooms();
     }
 
     public void addDates(String dateCheckIn, String dateCheckOut, int roomNumber)
@@ -127,14 +95,6 @@ public class UserService
 
     public List<Room> getUnavailableRooms()
     {
-        List<Room> unavailableRooms = new ArrayList<>();
-        for(Room room : getRoomList())
-        {
-            if(!room.isAvailable() && room.isCleaned())
-            {
-                unavailableRooms.add(room);
-            }
-        }
-        return unavailableRooms;
+        return hotel.listUnavailableRooms();
     }
 }

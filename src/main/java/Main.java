@@ -1,4 +1,3 @@
-import java.util.Scanner;
 
 public class Main
 {
@@ -6,6 +5,5 @@ public class Main
     {
         Controller controller = new Controller();
         controller.manageHotel();
-
     }
 }

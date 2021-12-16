@@ -7,26 +7,30 @@ public class Controller
 
     //interakcja only
     private UserService userService;
-    private boolean isRunning;
+
     Controller()
     {
         userService = new UserService();
-        isRunning = true;
     }
 
     public void manageHotel()
     {
         System.out.println("Welcome to the Grand Hotel");
 
-        int choice;
+        int choice = 0;
         do
         {
-            showMenu();
-            choice = readChoice();
-            executeChoice(choice);
-
+            try
+            {
+                showMenu();
+                choice = readChoice();
+                executeChoice(choice);
+            } catch (HotelException e)
+            {
+                System.out.println(e.getMessage());
+            }
         }
-        while(choice != 8);
+        while (choice != 7);
         System.out.println("Did not find what you were looking for? Call Hotel Service 600-500-400");
     }
 
@@ -49,8 +53,7 @@ public class Controller
         {
             Scanner scanner = new Scanner(System.in);
             input = scanner.nextInt();
-        }
-        catch (NumberFormatException |InputMismatchException e)
+        } catch (NumberFormatException | InputMismatchException e)
         {
             System.out.println("Not found, enter again");
             input = readChoice();
@@ -58,7 +61,7 @@ public class Controller
         return input;
     }
 
-    public void executeChoice(int input)
+    public void executeChoice(int input) throws HotelException
     {
         switch (input)
         {
@@ -91,70 +94,68 @@ public class Controller
     public void listAllRooms()
     {
         List<Room> allRoomList = userService.getRoomList();
-        for(Room room : allRoomList)
-        {
-            System.out.println(room.toString());
-        }
+        printRooms(allRoomList);
     }
 
     public void listAvailableRooms()
     {
         List<Room> allAvailableRooms = userService.getAvailableRooms();
-        for(Room room : allAvailableRooms)
+        printRooms(allAvailableRooms);
+    }
+
+    private void printRooms(List<Room> rooms)
+    {
+        for (Room room : rooms)
         {
             System.out.println(room.toString());
         }
     }
 
-    public void bookRoom()
+    public void bookRoom() throws HotelException
     {
-        //poprawic za dlugie
         System.out.println("Please enter room number you wish to book");
         Scanner scanner = new Scanner(System.in);
         int roomToBook = scanner.nextInt();
         boolean isAvailable = userService.checkIfAvailable(roomToBook);
-        if(isAvailable)
-        {
-            boolean isAdult = readGuestData(roomToBook);
-            if(isAdult)
-            {
-                userService.bookRoom(roomToBook);
-                askForDates(roomToBook);
-                System.out.println("Room booked, please check your email");
-            }
-            else
-            {
-                System.out.println("Sorry, only adults can book rooms");
-            }
-        } else
+        if (!isAvailable)
         {
             System.out.println("Room booked or in cleaning");
+            return;
+        }
+
+        String dateCHeckin = askForDate("Please enter check in date (YYY-MM-DD)");
+        String dateCHeckout = askForDate("Please enter check out date (YYYY-MM-DD)");
+        System.out.println("Room booked, please check your email");
+
+        Guest guest = readGuestData();  //ewentualnie lista gosci, zeby sprawdzac czy jest adult jeden zn ich
+        if (!guest.isAdult())
+        {
+            System.out.println("Sorry, only adults can book rooms");
+            return;
+
         }
 
 
+
     }
 
-    public void askForDates(int roomNumber)
+    public String askForDate(String question)
     {
-        System.out.println("Please enter check in date (YYY-MM-DD)");
+        System.out.println();
         Scanner scanner = new Scanner(System.in);
-        String dateCheckIn = scanner.nextLine();
-        System.out.println("Please enter check out date (YYYY-MM-DD)");
-        Scanner scanner2 = new Scanner(System.in);
-        String dateCheckout = scanner2.nextLine();
-        userService.addDates(dateCheckIn, dateCheckout, roomNumber);
+        String date = scanner.nextLine();
+
+        return date;
     }
 
-    public boolean readGuestData(int roomNumber)
+    public Guest readGuestData()
     {
-        System.out.println("Please insert guest number");
         System.out.println("Please insert your name and lastname");
         Scanner scanner = new Scanner(System.in);
         String nameLastname = scanner.nextLine();
         System.out.println("Please insert your date of birth (yyyy-mm-dd)");
-        Scanner scanner2 = new Scanner(System.in);
-        String date = scanner2.nextLine();
-        return userService.addNameToGuestList(nameLastname, date, roomNumber);
+        String date = scanner.nextLine();
+        return new Guest(nameLastname, date);
     }
 
 //    public void readDateOfBirth()
@@ -163,13 +164,13 @@ public class Controller
 //
 //    }
 
-    public void vacateRoom()
+    public void vacateRoom() throws HotelException
     {
         System.out.println("Enter the number of the room which you are vacating");
         Scanner scanner3 = new Scanner(System.in);
         int roomToVacate = scanner3.nextInt();
         boolean canBeVacated = userService.vacateRoom(roomToVacate);
-        if(canBeVacated)
+        if (canBeVacated)
         {
             System.out.println("You have successfully checked out");
         } else
@@ -181,24 +182,24 @@ public class Controller
     public void listUncleanedRooms()
     {
         System.out.println("List of uncleaned rooms:");
-        List<Room> uncleanedRooms = userService.listUncleanedRooms();
-        for(Room room : uncleanedRooms)
+        List<Room> uncleanedRooms = userService.getUncleanedRooms();
+        for (Room room : uncleanedRooms)
         {
             System.out.println(room.toString());
         }
-        if(uncleanedRooms.isEmpty())
+        if (uncleanedRooms.isEmpty())
         {
             System.out.println("No matching results");
         }
     }
 
-    public void askForCleaning()
+    public void askForCleaning() throws HotelException
     {
         System.out.println("Which room would you like to have cleaned? (number)");
         Scanner scanner = new Scanner(System.in);
         int roomToBeCleaned = scanner.nextInt();
         boolean cleaned = userService.cleanRoom(roomToBeCleaned);
-        if(cleaned)
+        if (cleaned)
         {
             System.out.println("The room has been cleaned");
         } else
@@ -210,7 +211,7 @@ public class Controller
     public void listAllUnavailable()
     {
         List<Room> unavailableRooms = userService.getUnavailableRooms();
-        for(Room room : unavailableRooms)
+        for (Room room : unavailableRooms)
         {
             System.out.println(room.toString());
         }
