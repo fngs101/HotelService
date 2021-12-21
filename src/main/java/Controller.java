@@ -1,3 +1,4 @@
+import java.time.LocalDate;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
@@ -30,7 +31,7 @@ public class Controller
                 System.out.println(e.getMessage());
             }
         }
-        while (choice != 7);
+        while (choice != 8);
         System.out.println("Did not find what you were looking for? Call Hotel Service 600-500-400");
     }
 
@@ -43,7 +44,8 @@ public class Controller
         System.out.println("4 - vacate a room");
         System.out.println("5 - show all uncleaned rooms");
         System.out.println("6 - ask to clean a room");
-        System.out.println("7 - cancel");
+        System.out.println("7 - show all unavailable rooms");
+        System.out.println("8 - cancel");
     }
 
     public int readChoice()
@@ -123,11 +125,13 @@ public class Controller
             return;
         }
 
-        String dateCHeckin = askForDate("Please enter check in date (YYY-MM-DD)");
-        String dateCHeckout = askForDate("Please enter check out date (YYYY-MM-DD)");
+        LocalDate dateCheckIn = askForDate("Please enter check in date (YYY-MM-DD)");
+        System.out.println(dateCheckIn);
+        LocalDate dateCheckOut = askForDate("Please enter check out date (YYYY-MM-DD)");
+        System.out.println(dateCheckOut);
         System.out.println("Room booked, please check your email");
 
-        Guest guest = readGuestData();  //ewentualnie lista gosci, zeby sprawdzac czy jest adult jeden zn ich
+        Guest guest = readGuestData();
         if (!guest.isAdult())
         {
             System.out.println("Sorry, only adults can book rooms");
@@ -139,13 +143,14 @@ public class Controller
 
     }
 
-    public String askForDate(String question)
+    public LocalDate askForDate(String question)
     {
-        System.out.println();
+        System.out.println(question);
         Scanner scanner = new Scanner(System.in);
         String date = scanner.nextLine();
+        LocalDate dateConverted = LocalDate.parse(date);
 
-        return date;
+        return dateConverted;
     }
 
     public Guest readGuestData()

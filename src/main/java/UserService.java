@@ -1,11 +1,8 @@
-import java.util.ArrayList;
+import java.time.LocalDate;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class UserService
 {
-    //troche zepsułam bo w tym momencie klasa hotel stała sie zbędna, czy moze byc ta obecna przekształcona na hotelservice
-    //i posiadac liste pokojów?
     //cala logika apki
     private Hotel hotel;
 
@@ -93,8 +90,17 @@ public class UserService
         }
     }
 
+
     public List<Room> getUnavailableRooms()
     {
         return hotel.listUnavailableRooms();
+    }
+
+    public void validateDate(LocalDate date) throws DateException
+    {
+        if(date.isBefore(LocalDate.now())) //sprawdzic co to jest now
+        {
+            throw new DateException("Cannot choose date earlier than " + LocalDate.now());
+        }
     }
 }
