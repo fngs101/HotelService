@@ -26,13 +26,13 @@ public class Controller
                 showMenu();
                 choice = readChoice();
                 executeChoice(choice);
-            } catch (HotelException e)
+            } catch (HotelException | DateException e)
             {
                 System.out.println(e.getMessage());
             }
         }
         while (choice != 8);
-        System.out.println("Did not find what you were looking for? Call Hotel Service 600-500-400");
+        System.out.println("Have an idea to improve the service? Write a mail to the developer: fabDev@fabDev.com");
     }
 
     public void showMenu()
@@ -63,7 +63,7 @@ public class Controller
         return input;
     }
 
-    public void executeChoice(int input) throws HotelException
+    public void executeChoice(int input) throws HotelException, DateException
     {
         switch (input)
         {
@@ -113,7 +113,7 @@ public class Controller
         }
     }
 
-    public void bookRoom() throws HotelException
+    public void bookRoom() throws HotelException, DateException
     {
         System.out.println("Please enter room number you wish to book");
         Scanner scanner = new Scanner(System.in);
@@ -125,10 +125,8 @@ public class Controller
             return;
         }
 
-        LocalDate dateCheckIn = askForDate("Please enter check in date (YYY-MM-DD)");
-        System.out.println(dateCheckIn);
-        LocalDate dateCheckOut = askForDate("Please enter check out date (YYYY-MM-DD)");
-        System.out.println(dateCheckOut);
+        askForDate("Please enter check in date (YYYY-MM-DD)");
+        askForDate("Please enter check out date (YYYY-MM-DD)");
         System.out.println("Room booked, please check your email");
 
         Guest guest = readGuestData();
@@ -136,21 +134,20 @@ public class Controller
         {
             System.out.println("Sorry, only adults can book rooms");
             return;
-
         }
 
 
 
     }
 
-    public LocalDate askForDate(String question)
+    public void askForDate(String question) throws DateException
     {
         System.out.println(question);
         Scanner scanner = new Scanner(System.in);
         String date = scanner.nextLine();
+        userService.validateStringDate(date);
         LocalDate dateConverted = LocalDate.parse(date);
-
-        return dateConverted;
+        userService.validateDate(dateConverted);
     }
 
     public Guest readGuestData()

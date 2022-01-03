@@ -77,18 +77,18 @@ public class UserService
         return hotel.listUncleanedRooms();
     }
 
-    public void addDates(String dateCheckIn, String dateCheckOut, int roomNumber)
-    {
-        List<Room> unavailable = getUnavailableRooms();
-        for(Room room : unavailable)
-        {
-            if(room.getNumber() == roomNumber)
-            {
-                room.setCheckInDate(dateCheckIn);
-                room.setCheckOutDate(dateCheckOut);
-            }
-        }
-    }
+//    public void addDates(String dateCheckIn, String dateCheckOut, int roomNumber)
+//    {
+//        List<Room> unavailable = getUnavailableRooms();
+//        for(Room room : unavailable)
+//        {
+//            if(room.getNumber() == roomNumber)
+//            {
+//                room.setCheckInDate(dateCheckIn);
+//                room.setCheckOutDate(dateCheckOut);
+//            }
+//        }
+//    }
 
 
     public List<Room> getUnavailableRooms()
@@ -98,9 +98,18 @@ public class UserService
 
     public void validateDate(LocalDate date) throws DateException
     {
-        if(date.isBefore(LocalDate.now())) //sprawdzic co to jest now
+
+        if(date.isBefore(LocalDate.now())) //przekazać te daty hotelowi a potem zrobic liste z nich i ich date wymeldowania
         {
             throw new DateException("Cannot choose date earlier than " + LocalDate.now());
+        }
+    }
+
+    public void validateStringDate(String date) throws DateException
+    {
+        if(!date.matches("^\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$"))
+        {
+            throw new DateException("Wrong date format");
         }
     }
 }
