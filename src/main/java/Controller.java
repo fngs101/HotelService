@@ -125,22 +125,26 @@ public class Controller
             return;
         }
 
-        askForDate("Please enter check in date (YYYY-MM-DD)");
-        askForDate("Please enter check out date (YYYY-MM-DD)");
-        System.out.println("Room booked, please check your email");
+        LocalDate checkInDate = askForDate("Please enter check in date (YYYY-MM-DD)");
+        userService.addCheckInDate(checkInDate, roomToBook);
+
+        LocalDate checkOutDate = askForDate("Please enter check out date (YYYY-MM-DD)");
+        userService.addCheckOutDate(checkOutDate, roomToBook);
 
         Guest guest = readGuestData();
         if (!guest.isAdult())
         {
-            System.out.println("Sorry, only adults can book rooms");
+            System.out.println("Only adults can book rooms");
             return;
         }
 
-
+        userService.bookRoom(roomToBook);
+        userService.addNameToGuestList(guest.getName(), guest.getBirthday(), roomToBook);
+        System.out.println("Room booked");
 
     }
 
-    public void askForDate(String question) throws DateException
+    public LocalDate askForDate(String question) throws DateException
     {
         System.out.println(question);
         Scanner scanner = new Scanner(System.in);
@@ -148,6 +152,8 @@ public class Controller
         userService.validateStringDate(date);
         LocalDate dateConverted = LocalDate.parse(date);
         userService.validateDate(dateConverted);
+        return dateConverted;
+
     }
 
     public Guest readGuestData()
@@ -160,11 +166,6 @@ public class Controller
         return new Guest(nameLastname, date);
     }
 
-//    public void readDateOfBirth()
-//    {
-//        czy to nie powinna byc osobna metoda na datę guest, bo może ta wyżej juz troche za duzo ma?
-//
-//    }
 
     public void vacateRoom() throws HotelException
     {

@@ -11,7 +11,6 @@ public class UserService
         hotel = new Hotel();
     }
 
-
     public List<Room> getRoomList()
     {
         return hotel.getAllRooms();
@@ -23,7 +22,7 @@ public class UserService
     }
 
 
-    public void bookRoom(int roomNumber, Guest guest, String checkInDate, String checkOutDate) throws HotelException
+    public void bookRoom(int roomNumber) throws HotelException
     {
         Room room = hotel.getRoom(roomNumber);
         room.setAvailable(false);
@@ -52,7 +51,7 @@ public class UserService
     public boolean vacateRoom(int roomNumber) throws HotelException
     {
         Room room = hotel.getRoom(roomNumber);
-        if(!room.isAvailable())
+        if (!room.isAvailable())
         {
             room.setAvailable(true);
             room.setUncleaned();
@@ -64,7 +63,7 @@ public class UserService
     public boolean cleanRoom(int roomNumber) throws HotelException
     {
         Room room = hotel.getRoom(roomNumber);
-        if(!room.isCleaned())
+        if (!room.isCleaned())
         {
             room.setCleaned();
             return true;
@@ -77,20 +76,6 @@ public class UserService
         return hotel.listUncleanedRooms();
     }
 
-//    public void addDates(String dateCheckIn, String dateCheckOut, int roomNumber)
-//    {
-//        List<Room> unavailable = getUnavailableRooms();
-//        for(Room room : unavailable)
-//        {
-//            if(room.getNumber() == roomNumber)
-//            {
-//                room.setCheckInDate(dateCheckIn);
-//                room.setCheckOutDate(dateCheckOut);
-//            }
-//        }
-//    }
-
-
     public List<Room> getUnavailableRooms()
     {
         return hotel.listUnavailableRooms();
@@ -99,10 +84,12 @@ public class UserService
     public void validateDate(LocalDate date) throws DateException
     {
 
-        if(date.isBefore(LocalDate.now())) //przekazać te daty hotelowi a potem zrobic liste z nich i ich date wymeldowania
+        if (date.isBefore(LocalDate.now()))
         {
             throw new DateException("Cannot choose date earlier than " + LocalDate.now());
         }
+
+
     }
 
     public void validateStringDate(String date) throws DateException
@@ -111,5 +98,15 @@ public class UserService
         {
             throw new DateException("Wrong date format");
         }
+    }
+
+    public void addCheckInDate(LocalDate checkInDate, int roomToBook)
+    {
+        hotel.addCheckInDate(checkInDate, roomToBook);
+    }
+
+    public void addCheckOutDate(LocalDate checkOutDate, int roomToBook)
+    {
+        hotel.addCheckOutDate(checkOutDate, roomToBook);
     }
 }

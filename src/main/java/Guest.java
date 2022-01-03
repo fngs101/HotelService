@@ -15,7 +15,7 @@ public class Guest
     @Override
     public String toString()
     {
-        return name + " " + birthday;
+        return name + ", date of birth: " + birthday;
     }
 
     public boolean isAdult()
@@ -23,5 +23,15 @@ public class Guest
         LocalDate birthDate = LocalDate.parse(birthday);
         LocalDate underage = LocalDate.parse("2002-12-14");
         return birthDate.isBefore(underage);
+    }
+
+    public String getName()
+    {
+        return name;
+    }
+
+    public String getBirthday()
+    {
+        return birthday;
     }
 }

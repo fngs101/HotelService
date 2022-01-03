@@ -11,8 +11,8 @@ public class Room
     private boolean available;
     private List<Guest> guestList;
     private boolean cleaned;
-    private String checkInDate;
-    private String checkOutDate;
+    private LocalDate checkInDate;
+    private LocalDate checkOutDate;
 
     Room(int number, int size, boolean bathroomIncluded, boolean available)
     {
@@ -22,8 +22,8 @@ public class Room
         this.available = available;
         guestList = new ArrayList<>();
         cleaned = true;
-        checkInDate = "";
-        checkOutDate = "";
+        checkInDate = null;
+        checkOutDate = null;
     }
 
     public boolean isAvailable()
@@ -34,7 +34,12 @@ public class Room
     @Override
     public String toString()
     {
-        return "Room number "  + number + " checkout date: " + checkOutDate;
+        if(!guestList.isEmpty())
+        {
+            return "Room number " + number + ", checkout date: " + checkOutDate +
+                    "\nBooked by " + guestList.get(0);
+        }
+        return "Room number "  + number + ", not booked";
     }
 
     public int getNumber()
@@ -74,13 +79,14 @@ public class Room
         return cleaned;
     }
 
-    public void setCheckInDate(String checkInDate)
+    public void setCheckInDate(LocalDate checkInDate)
     {
         this.checkInDate = checkInDate;
     }
 
-    public void setCheckOutDate(String checkOutDate)
+    public void setCheckOutDate(LocalDate checkOutDate)
     {
         this.checkOutDate = checkOutDate;
     }
+
 }

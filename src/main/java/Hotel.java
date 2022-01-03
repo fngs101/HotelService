@@ -1,3 +1,4 @@
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -73,4 +74,27 @@ public class Hotel
                 .filter(Room::isAvailable)
                 .collect(Collectors.toList());
     }
+
+    public void addCheckInDate(LocalDate date, int roomToBook)
+    {
+        for(Room room : rooms)
+        {
+            if(room.getNumber() == roomToBook)
+            {
+                room.setCheckInDate(date);
+            }
+        }
+    }
+    public void addCheckOutDate(LocalDate date, int roomToBook)
+    {
+        for(Room room : rooms)
+        {
+            if(room.getNumber() == roomToBook)
+            {
+                room.setCheckOutDate(date);
+            }
+        }
+    }
+
+
 }
