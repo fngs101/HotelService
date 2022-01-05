@@ -115,11 +115,10 @@ public class Controller
 
     public void bookRoom() throws HotelException, DateException
     {
-        System.out.println("Please enter room number you wish to book");
-        Scanner scanner = new Scanner(System.in);
-        int roomToBook = scanner.nextInt();
-        boolean isAvailable = userService.checkIfAvailable(roomToBook);
-        if (!isAvailable)
+        //nie bardzo pomysł jak skrócić tę metodę jeszcze bardziej
+        int roomToBook = askForRoomNumber();
+
+        if (!userService.isAvailable(roomToBook))
         {
             System.out.println("Room booked or in cleaning");
             return;
@@ -142,6 +141,13 @@ public class Controller
         userService.addNameToGuestList(guest.getName(), guest.getBirthday(), roomToBook);
         System.out.println("Room booked");
 
+    }
+
+    public int askForRoomNumber()
+    {
+        System.out.println("Please enter room number you wish to book");
+        Scanner scanner = new Scanner(System.in);
+        return scanner.nextInt();
     }
 
     public LocalDate askForDate(String question) throws DateException
@@ -214,9 +220,15 @@ public class Controller
     public void listAllUnavailable()
     {
         List<Room> unavailableRooms = userService.getUnavailableRooms();
-        for (Room room : unavailableRooms)
+        if(unavailableRooms.isEmpty())
         {
-            System.out.println(room.toString());
+            System.out.println("All rooms are available");
+        } else
+        {
+            for (Room room : unavailableRooms)
+            {
+                System.out.println(room.toString());
+            }
         }
 
     }

@@ -28,24 +28,21 @@ public class UserService
         room.setAvailable(false);
     }
 
-    public boolean checkIfAvailable(int roomNumber) throws HotelException
+    public boolean isAvailable(int roomNumber) throws HotelException
     {
         Room room = hotel.getRoom(roomNumber);
         return room.isCleaned() && room.isAvailable();
     }
 
-    public boolean addNameToGuestList(String identity, String date, int roomNumber)
+    public void addNameToGuestList(String identity, String date, int roomNumber)
     {
-        boolean added = false;
         for(Room room : getRoomList())
         {
             if(room.getNumber() == roomNumber)
             {
-                added = room.addToGuestList(identity, date);
+                room.addToGuestList(identity, date);
             }
         }
-        return added;
-
     }
 
     public boolean vacateRoom(int roomNumber) throws HotelException
