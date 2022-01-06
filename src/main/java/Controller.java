@@ -128,7 +128,7 @@ public class Controller
         userService.addCheckInDate(checkInDate, roomToBook);
 
         LocalDate checkOutDate = askForDate("Please enter check out date (YYYY-MM-DD)");
-        userService.addCheckOutDate(checkOutDate, roomToBook);
+        userService.addCheckOutDate(checkInDate, checkOutDate, roomToBook);
 
         Guest guest = readGuestData();
         if (!guest.isAdult())
@@ -157,7 +157,7 @@ public class Controller
         String date = scanner.nextLine();
         userService.validateStringDate(date);
         LocalDate dateConverted = LocalDate.parse(date);
-        userService.validateDate(dateConverted);
+        userService.validateCheckInDate(dateConverted);
         return dateConverted;
 
     }

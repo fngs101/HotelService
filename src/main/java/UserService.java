@@ -78,7 +78,7 @@ public class UserService
         return hotel.listUnavailableRooms();
     }
 
-    public void validateDate(LocalDate date) throws DateException
+    public void validateCheckInDate(LocalDate date) throws DateException
     {
 
         if (date.isBefore(LocalDate.now()))
@@ -102,8 +102,20 @@ public class UserService
         hotel.addCheckInDate(checkInDate, roomToBook);
     }
 
-    public void addCheckOutDate(LocalDate checkOutDate, int roomToBook)
+    public boolean isCheckOutDateValid(LocalDate checkInDate, LocalDate checkOutDate) throws DateException
     {
-        hotel.addCheckOutDate(checkOutDate, roomToBook);
+        if(checkOutDate.isBefore(checkInDate))
+        {
+            throw new DateException("Check out date cannot be before check in date");
+        }
+        return true;
+    }
+
+    public void addCheckOutDate(LocalDate checkInDate, LocalDate checkOutDate, int roomToBook) throws DateException
+    {
+        if(isCheckOutDateValid(checkInDate, checkOutDate))
+        {
+            hotel.addCheckOutDate(checkOutDate, roomToBook);
+        }
     }
 }
