@@ -116,7 +116,7 @@ public class Controller
 
     public void bookRoom() throws HotelException, DateException
     {
-        //nie bardzo pomysł jak skrócić tę metodę jeszcze bardziej
+
         int roomToBook = askForRoomNumber();
 
         if (!userService.isAvailable(roomToBook))
