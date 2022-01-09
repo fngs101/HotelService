@@ -1,4 +1,5 @@
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
@@ -26,7 +27,7 @@ public class Controller
                 showMenu();
                 choice = readChoice();
                 executeChoice(choice);
-            } catch (HotelException | DateException e)
+            } catch (HotelException | DateException | DateTimeParseException e)
             {
                 System.out.println(e.getMessage());
             }
